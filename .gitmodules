@@ -1,0 +1,6 @@
+[submodule "uri"]
+	path = uri
+	url = https://github.com/cpp-netlib/uri.git
+[submodule "variantxx"]
+	path = variantxx
+	url = https://github.com/LEW21/variantxx.git
