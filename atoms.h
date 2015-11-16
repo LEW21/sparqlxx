@@ -11,8 +11,6 @@
 #pragma GCC diagnostic pop
 #include <boost/optional.hpp>
 
-#include "quote.h"
-
 namespace sparqlxx
 {
 	using std::string;
@@ -77,7 +75,10 @@ namespace sparqlxx
 
 	inline auto to_sparql(const Iri& v) -> std::string
 	{
-		return quote<'<', '>'>(to_string(v));
+		// Note from 4.1.1 Syntax for IRIs:
+		// RDF URI references containing "<", ">", '"' (double quote), space, "{", "}", "|", "\", "^", and "`" are not IRIs.
+		// The behavior of a SPARQL query against RDF statements composed of such RDF URI references is not defined.
+		return "<" + to_string(v) + ">";
 	}
 
 	// Note: network::uri sux, operator== crashes if any IRI is invalid (even when they're ==).
@@ -135,9 +136,57 @@ namespace sparqlxx
 		return Literal{s.substr(0, lang_pos), LangTag{s.substr(lang_pos + 1)}};
 	}
 
+	inline auto __quote(const std::string& v)
+	{
+		// 19.7 Escape sequences in strings
+		auto turtle = std::string{};
+		turtle.reserve(v.size() * 2);
+
+		turtle += '"';
+
+		for (auto c : v)
+			switch (c)
+			{
+				case '\\':
+					turtle += "\\\\";
+					break;
+
+				case '\t':
+					turtle += "\\t";
+					break;
+
+				case '\n':
+					turtle += "\\n";
+					break;
+
+				case '\r':
+					turtle += "\\r";
+					break;
+
+				case '\b':
+					turtle += "\\b";
+					break;
+
+				case '\f':
+					turtle += "\\f";
+					break;
+
+				case '"':
+					turtle += "\\\"";
+					break;
+
+				default:
+					turtle += c;
+					break;
+			}
+
+			turtle += '"';
+			return turtle;
+	}
+
 	inline auto to_sparql(const Literal& v) -> std::string
 	{
-		auto s = quote<'"'>(to_string(v));
+		auto s = __quote(to_string(v));
 		if (v.type == Iri{"http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"})
 			return s + "@" + v.lang.tag;
 		else if (v.type == Iri{"http://www.w3.org/2001/XMLSchema#string"})
