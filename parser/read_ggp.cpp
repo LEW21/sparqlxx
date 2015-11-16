@@ -63,7 +63,7 @@ inline auto parseGroupGraphPatternSub(token_stream& t) -> AnyOp
 	if (filters.size())
 		return make<Filter>(std::move(filters), std::move(gp));
 	else
-		return std::move(gp);
+		return gp;
 }
 
 inline auto collectTriples(TriplesBlockN& triples, AnyOp&& gp) -> AnyOp
