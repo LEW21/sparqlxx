@@ -70,6 +70,19 @@ namespace sparqlxx
 						if (got.size() && (got[0] == '"' || got[0] == '\''))
 							return {got + got[0]};
 					}
+					if (ex == "int")
+					{
+						if (got.size())
+						{
+							try
+							{
+								std::stoi(got);
+								return {got};
+							}
+							catch (std::invalid_argument&) {}
+						}
+						continue;
+					}
 					if (_autocomplete_iequals(ex, e.got, e.got.size() - 1))
 						matches.emplace_back(ex);
 				}

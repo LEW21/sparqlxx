@@ -18,7 +18,14 @@ namespace sparqlxx
 	inline auto token_stream::is<int>() -> bool
 	{
 		token.expect("int");
-		return !is_end() && true; // TODO
+		if (is_end())
+			return false;
+
+		for (auto c : *token)
+			if (!(c >= '0' && c <= '9'))
+				return false;
+
+		return true;
 	}
 
 	template<>
