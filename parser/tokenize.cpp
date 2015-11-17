@@ -31,8 +31,6 @@ void init_is_space_special()
 
 	for (auto c : special)
 		is_special[c] = true;
-
-	is_special['\0'] = true;
 }
 
 template <typename F>
