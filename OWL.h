@@ -2,6 +2,7 @@
 
 #define _nsowl "http://www.w3.org/2002/07/owl#"
 
+// http://www.w3.org/2002/07/owl# namespace
 namespace OWL
 {
 	constexpr const auto Class           = _nsowl "Class";
