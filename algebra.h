@@ -7,6 +7,7 @@
 
 namespace sparqlxx
 {
+	// SPARQL Algebra structures
 	namespace Algebra
 	{
 		struct Null;
@@ -25,7 +26,9 @@ namespace sparqlxx
 		struct Reduced;
 		struct Slice;
 
+		// Any Algebra operation: <Null>, <Basic>, <Quad>, <Join>, <LeftJoin>, <Minus>, <Union>, <Graph>, <Service>, <Filter>, <Extend>, <Project>, <Distinct>, <Reduced> or <Slice>.
 		using Op = xx::variant<Null, Basic, Quad, Join, LeftJoin, Minus, Union, Graph, Service, Filter, Extend, Project, Distinct, Reduced, Slice>;
+		// A <copy_ptr> to <Op>
 		using AnyOp = copy_ptr<Op>;
 
 		struct [[gnu::visibility("default")]] Null {Null(){} Null(const Null&){}};

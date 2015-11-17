@@ -1,12 +1,15 @@
 #include "algebra.h"
 
-// Serialize the SPARQL algebra to SSE - in a way as similar to Apache Jena as possible
-// without sacrificing sanity (= preserving qualified names in the algebra).
 namespace sparqlxx
 {
 	namespace Algebra
 	{
-		// Make the parameters explicitely-typed.
+		/* Serialize the SPARQL algebra to SSE
+		 *
+		 * Do it in a way as similar to Apache Jena as possible
+		 * without sacrificing sanity (= preserving qualified names in the algebra).
+		 */
+		//- Make the parameters explicitely-typed.
 		template <typename F> auto to_sse(const F&, int level = 0) -> std::string;
 
 		auto to_sse(const Op& p, int level = 0) -> std::string;

@@ -41,6 +41,9 @@ namespace sparqlxx
 		return '?' + v.name;
 	}
 
+	#ifdef SPARQLXX_DOC
+	#define _parse_uri(x) network::uri{}
+	#else
 	inline auto _parse_uri(const std::string& iri) -> network::uri
 	{
 		try
@@ -53,6 +56,7 @@ namespace sparqlxx
 			return network::uri_builder().path(iri).uri();
 		}
 	}
+	#endif
 
 	struct [[gnu::visibility("default")]] Iri
 	{
@@ -123,11 +127,25 @@ namespace sparqlxx
 		return v.value;
 	}
 
+	/* Encode a rdf:langString as "value@lang".
+	 * @v rdf:langString
+	 *
+	 * As described in http://www.w3.org/TR/rdf-plain-literal/#Definition_of_the_rdf:PlainLiteral_Datatype
+	 *
+	 * @return string of the form "value@lang"
+	 */
 	inline auto encode_langstring(const Literal& v) -> std::string
 	{
 		return to_string(v) + "@" + v.lang.tag;
 	}
 
+	/* Decode "value@lang" to a rdf:langString.
+	 * @s string of the form "value@lang".
+	 *
+	 * As described in http://www.w3.org/TR/rdf-plain-literal/#Definition_of_the_rdf:PlainLiteral_Datatype
+	 *
+	 * @return rdf:langString
+	 */
 	inline auto decode_langstring(const std::string& s) -> Literal
 	{
 		auto lang_pos = s.find_last_of('@');
@@ -136,7 +154,10 @@ namespace sparqlxx
 		return Literal{s.substr(0, lang_pos), LangTag{s.substr(lang_pos + 1)}};
 	}
 
-	inline auto __quote(const std::string& v)
+	#ifdef SPARQLXX_DOC
+	#define _quote(x) x
+	#else
+	inline auto _quote(const std::string& v)
 	{
 		// 19.7 Escape sequences in strings
 		auto turtle = std::string{};
@@ -183,10 +204,11 @@ namespace sparqlxx
 			turtle += '"';
 			return turtle;
 	}
+	#endif
 
 	inline auto to_sparql(const Literal& v) -> std::string
 	{
-		auto s = __quote(to_string(v));
+		auto s = _quote(to_string(v));
 		if (v.type == Iri{"http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"})
 			return s + "@" + v.lang.tag;
 		else if (v.type == Iri{"http://www.w3.org/2001/XMLSchema#string"})

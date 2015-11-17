@@ -7,45 +7,50 @@
 
 namespace sparqlxx
 {
-	struct [[gnu::visibility("default")]] Select
+	// SPARQL queries - inline namespace
+	inline namespace QueryCmd
 	{
-		Dataset dataset; // optional
-		Algebra::AnyOp op;
+		struct [[gnu::visibility("default")]] Select
+		{
+			Dataset dataset; // optional
+			Algebra::AnyOp op;
 
-		Select() {}
+			Select() {}
 
-		Select(Dataset dataset, Algebra::AnyOp op): dataset(std::move(dataset)), op(std::move(op)) {}
-		Select(Algebra::AnyOp op): op(std::move(op)) {}
-	};
+			Select(Dataset dataset, Algebra::AnyOp op): dataset(std::move(dataset)), op(std::move(op)) {}
+			Select(Algebra::AnyOp op): op(std::move(op)) {}
+		};
 
-	struct [[gnu::visibility("default")]] Construct
-	{
-		Dataset dataset; // optional
-		Algebra::AnyOp op;
-		TriplesTemplateN tpl;
+		struct [[gnu::visibility("default")]] Construct
+		{
+			Dataset dataset; // optional
+			Algebra::AnyOp op;
+			TriplesTemplateN tpl;
 
-		Construct() {}
-	};
+			Construct() {}
+		};
 
-	struct [[gnu::visibility("default")]] Describe
-	{
-		Dataset dataset; // optional
-		Algebra::AnyOp op; // optional if terms provided and they don't contain Var
-		vector<VarOrTerm> terms; // optional if op provided
+		struct [[gnu::visibility("default")]] Describe
+		{
+			Dataset dataset; // optional
+			Algebra::AnyOp op; // optional if terms provided and they don't contain Var
+			vector<VarOrTerm> terms; // optional if op provided
 
-		Describe() {}
-	};
+			Describe() {}
+		};
 
-	struct [[gnu::visibility("default")]] Ask
-	{
-		Dataset dataset; // optional
-		Algebra::AnyOp op;
+		struct [[gnu::visibility("default")]] Ask
+		{
+			Dataset dataset; // optional
+			Algebra::AnyOp op;
 
-		Ask() {}
+			Ask() {}
 
-		Ask(Dataset dataset, Algebra::AnyOp op): dataset(std::move(dataset)), op(std::move(op)) {}
-		Ask(Algebra::AnyOp op): op(std::move(op)) {}
-	};
+			Ask(Dataset dataset, Algebra::AnyOp op): dataset(std::move(dataset)), op(std::move(op)) {}
+			Ask(Algebra::AnyOp op): op(std::move(op)) {}
+		};
+	}
 
+	// Any Query command: <QueryCmd::Select>, <QueryCmd::Construct>, <QueryCmd::Describe> or <QueryCmd::Ask>
 	using Query = xx::variant<Select, Construct, Describe, Ask>;
 }

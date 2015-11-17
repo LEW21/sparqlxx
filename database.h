@@ -64,16 +64,53 @@ namespace sparqlxx
 		Database(const DSN& dsn): _db{loadDatabaseImpl(dsn)} {}
 		Database(const std::string& dsn): _db{loadDatabaseImpl(parseDSN(dsn))} {}
 
+		/* Perform a SPARQL query/update
+		 * @q query/update to perform
+		 * 
+		 * @return query result
+		 */
 		auto query(const SPARQL& q) -> Result {return _db->query(q);}
+
+		/* Perform a SPARQL query/update
+		 * @sparql query/update to perform
+		 *
+		 * @return query result
+		 */
 		auto query(const std::string& sparql) -> Result {return query(parse(sparql));}
 
+		/* INSERT DATA into the database
+		 * @q data to insert
+		 */
 		void insert(Quads q) { query(InsertData{std::move(q)}); }
+		/* DELETE DATA from the database
+		 * @q data to delete
+		 */
 		void remove(Quads q) { query(DeleteData{std::move(q)}); }
 
+		/* Perform a SELECT query on the default dataset
+		 * @op Algebraic expression
+		 *
+		 * @return query solution
+		 */
 		auto select(Algebra::AnyOp op) -> Solution { return query(Select{std::move(op)}).get<Solution>(); }
+		/* Perform a ASK query on the default dataset
+		 * @op Algebraic expression
+		 *
+		 * @return query solution
+		 */
 		auto ask(Algebra::AnyOp op) -> bool { return query(Ask{std::move(op)}).get<bool>(); }
 
+		/* Perform a simple SELECT query - match the statements against graph patterns
+		 * @q quad patterns
+		 *
+		 * @return query solution
+		 */
 		auto select(QuadsVP q) -> Solution { return select(Algebra::make<Algebra::Quad>(std::move(q))); }
+		/* Perform a simple ASK query - match the statements against graph patterns
+		 * @q quad patterns
+		 *
+		 * @return query solution
+		 */
 		auto ask(QuadsVP q) -> bool { return ask(Algebra::make<Algebra::Quad>(std::move(q))); }
 	};
 }

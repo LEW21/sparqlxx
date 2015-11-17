@@ -4,6 +4,9 @@
 
 namespace sparqlxx
 {
+	#ifdef SPARQLXX_DOC
+	#define _autocomplete_iequals(a, b, c) true
+	#else
 	inline bool _autocomplete_iequals(const string& a, const string& b, int count)
 	{
 		for (size_t i = 0; i < count; ++i)
@@ -11,8 +14,14 @@ namespace sparqlxx
 				return false;
 			return true;
 	}
+	#endif
 
-	auto autocomplete(const std::string& buffer) -> std::vector<std::string>
+	/* Find possible completions of the given SPARQL query.
+	 * @buffer user input
+	 *
+	 * @return vector of possible completions
+	 */
+	inline auto autocomplete(const std::string& buffer) -> std::vector<std::string>
 	{
 		try
 		{
