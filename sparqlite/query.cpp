@@ -1,5 +1,7 @@
 #include "database.h"
 
+#include "../algebratransformers/to_quads.h"
+
 namespace sparqlite
 {
 	struct Break {};
@@ -121,16 +123,11 @@ namespace sparqlite
 		using sparqlxx::Term;
 
 		auto op = s.op;
+
 		if (!op || op->is<sparqlxx::Algebra::Null>())
 			return {};
 
-		if (op->is<sparqlxx::Algebra::Basic>())
-		{
-			auto quadpatterns = sparqlxx::QuadsVP{};
-			for (auto& p : op->get<sparqlxx::Algebra::Basic>().triples)
-				quadpatterns.emplace_back(p.subject, p.predicate, p.object, sparqlxx::Iri{RIRI::DefaultGraphNode});
-			op = sparqlxx::Algebra::make<sparqlxx::Algebra::Quad>(std::move(quadpatterns));
-		}
+		*op = sparqlxx::AlgebraTransformers::to_quads(std::move(*op), sparqlxx::Iri{RIRI::DefaultGraphNode});
 
 		if (op->is<sparqlxx::Algebra::Quad>())
 		{

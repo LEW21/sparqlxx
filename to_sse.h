@@ -39,7 +39,7 @@ namespace sparqlxx
 		inline auto to_sse(const Quad& q, int level = 0) -> std::string
 		{
 			if (q.quads.size() == 1)
-				return "(quadpattern [" + to_sparql(q.quads[0].graph) + " " + to_sparql(q.quads[0].subject) + " " + to_sparql(q.quads[0].predicate) + " " + to_sparql(q.quads[0].object) + "])\n";
+				return std::string(level, '\t') + "(quadpattern [" + to_sparql(q.quads[0].graph) + " " + to_sparql(q.quads[0].subject) + " " + to_sparql(q.quads[0].predicate) + " " + to_sparql(q.quads[0].object) + "])\n";
 
 			auto s = std::string(level, '\t') + "(quadpattern \n";
 			for (const auto& quad : q.quads)

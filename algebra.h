@@ -31,7 +31,7 @@ namespace sparqlxx
 		// A <copy_ptr> to <Op>
 		using AnyOp = copy_ptr<Op>;
 
-		struct [[gnu::visibility("default")]] Null {Null(){} Null(const Null&){}};
+		struct [[gnu::visibility("default")]] Null {Null(){} Null(const Null&){} Null(Null&&){}};
 
 		struct [[gnu::visibility("default")]] Basic
 		{

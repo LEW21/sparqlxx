@@ -18,6 +18,9 @@ test_parser_internal: bin/test_parser_internal
 test_parse: bin/test_parse
 	LD_LIBRARY_PATH=lib ./bin/test_parse
 
+test_transformers: bin/test_transformers
+	LD_LIBRARY_PATH=lib ./bin/test_transformers
+
 test_database_sparqlite: bin/test_database
 	LD_LIBRARY_PATH=lib ./bin/test_database sparqlite
 
@@ -31,7 +34,7 @@ bin/test_parser_internal: *.h parser/*.h parser/tokenize.cpp parser/parse.cpp pa
 	@test -d bin/ || mkdir -p bin/
 	$(CXX) $(CXXFLAGS) parser/*.cpp $(LIBS) -o bin/test_parser_internal
 
-lib/libsparqlite.so: *.h lib/libsparqlxx-parser.so sparqlite/*.h sparqlite/*.cpp
+lib/libsparqlite.so: *.h algebratransformers/*.h lib/libsparqlxx-parser.so sparqlite/*.h sparqlite/*.cpp
 	@test -d lib/ || mkdir -p lib/
 	$(CXX) $(CXXFLAGS) $(LIBFLAGS) sparqlite/database.cpp sparqlite/query.cpp sparqlite/update.cpp sparqlite/think.cpp $(LPARSER) -Wl,-soname,libsparqlite.so.0 -o ./lib/libsparqlite.so.0
 	rm -f ./lib/libsparqlite.so
@@ -52,6 +55,10 @@ bin/test_parse: tests/test_parse.cpp lib/libsparqlxx-parser.so
 bin/test_database: *.h tests/test_database.cpp lib/libsparqlite.so
 	@test -d bin/ || mkdir -p bin/
 	$(CXX) $(CXXFLAGS) tests/test_database.cpp -ldl $(LPARSER) $(LIBS) -o bin/test_database
+
+bin/test_transformers: *.h algebratransformers/*.h tests/test_transformers.cpp
+	@test -d bin/ || mkdir -p bin/
+	$(CXX) $(CXXFLAGS) tests/test_transformers.cpp -ldl $(LIBS) -o bin/test_transformers
 
 clean:
 	rm -rf bin lib
