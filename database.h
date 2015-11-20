@@ -92,7 +92,7 @@ namespace sparqlxx
 		 *
 		 * @return query solution
 		 */
-		auto select(Algebra::AnyOp op) -> Solution { return query(Select{std::move(op)}).get<Solution>(); }
+		auto select(Algebra::AnyOp op) -> Solutions { return query(Select{std::move(op)}).get<Solutions>(); }
 		/* Perform a ASK query on the default dataset
 		 * @op Algebraic expression
 		 *
@@ -105,7 +105,7 @@ namespace sparqlxx
 		 *
 		 * @return query solution
 		 */
-		auto select(QuadsVP q) -> Solution { return select(Algebra::make<Algebra::Quad>(std::move(q))); }
+		auto select(QuadsVP q) -> Solutions { return select(Algebra::make<Algebra::Quad>(std::move(q))); }
 		/* Perform a simple ASK query - match the statements against graph patterns
 		 * @q quad patterns
 		 *

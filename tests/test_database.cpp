@@ -13,7 +13,7 @@ void dump(Triples& tt)
 	cout << endl;
 }
 
-void dump(const sparqlxx::Solution& s)
+void dump(const sparqlxx::Solutions& s)
 {
 	if (!s.vars.size())
 	{
@@ -84,8 +84,8 @@ void test_full(char* dsn)
 		<Poland> <isIn> <Europe>.
 	})");
 
-	dump(db.query("SELECT * WHERE { <Warsaw> <isIn> ?what }").get<Solution>());
-	dump(db.query("SELECT * { ?s ?p ?o }").get<Solution>());
+	dump(db.query("SELECT * WHERE { <Warsaw> <isIn> ?what }").get<Solutions>());
+	dump(db.query("SELECT * { ?s ?p ?o }").get<Solutions>());
 }
 
 int main(int argc, char** argv)

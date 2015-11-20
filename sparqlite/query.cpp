@@ -77,7 +77,7 @@ namespace sparqlite
 		}
 	};
 
-	inline auto join(std::vector<sparqlxx::Solution>&& solutions) -> sparqlxx::Solution
+	inline auto join(std::vector<sparqlxx::Solutions>&& solutions) -> sparqlxx::Solutions
 	{
 		auto S = solutions[0];
 
@@ -85,7 +85,7 @@ namespace sparqlite
 		{
 			auto s1 = std::move(S);
 			auto s2 = solutions[i];
-			S = sparqlxx::Solution();
+			S = sparqlxx::Solutions();
 
 			auto mv = MapVars{};
 			for (const auto& v : s1.vars)
@@ -115,7 +115,7 @@ namespace sparqlite
 	}
 
 	template <>
-	auto Database::_query<sparqlxx::Select>(const sparqlxx::Select& s) -> sparqlxx::Solution
+	auto Database::_query<sparqlxx::Select>(const sparqlxx::Select& s) -> sparqlxx::Solutions
 	{
 		using sparqlxx::Var;
 		using sparqlxx::Term;
@@ -135,11 +135,11 @@ namespace sparqlite
 		if (op->is<sparqlxx::Algebra::Quad>())
 		{
 			auto patterns = op->get<sparqlxx::Algebra::Quad>().quads;
-			auto solutions = std::vector<sparqlxx::Solution>{};
+			auto solutions = std::vector<sparqlxx::Solutions>{};
 			solutions.reserve(patterns.size());
 			for (auto p : patterns)
 			{
-				auto S = sparqlxx::Solution{};
+				auto S = sparqlxx::Solutions{};
 
 				auto mv = MapVars{};
 				mv.add_var(p.subject);

@@ -17,7 +17,7 @@
 
 using namespace std;
 
-void dump(const sparqlxx::Solution& s)
+void dump(const sparqlxx::Solutions& s)
 {
 	if (!s.vars.size())
 	{
@@ -162,8 +162,8 @@ int main(int argc, char** argv)
 			buffer = {};
 
 			auto r = db.query(q);
-			if (r.is<sparqlxx::Solution>())
-				dump(r.get<sparqlxx::Solution>());
+			if (r.is<sparqlxx::Solutions>())
+				dump(r.get<sparqlxx::Solutions>());
 			else
 				cout << "OK" << endl;
 
