@@ -1,5 +1,5 @@
 CXX=clang++
-CXXFLAGS=-Wall -Werror -Wextra -pedantic -Wno-char-subscripts -Wno-sign-compare -Wno-unknown-pragmas -g -std=c++14 -Iuri/src/ -fdiagnostics-color -Wl,-E
+CXXFLAGS=-Wall -Werror -Wextra -pedantic -Wno-char-subscripts -Wno-sign-compare -Wno-unknown-pragmas -Wno-error=unused-parameter -g -std=c++14 -Iuri/src/ -fdiagnostics-color -Wl,-E
 LIBFLAGS=-shared -fPIC -fvisibility=hidden
 LIBS=uri/_build/src/libnetwork-uri.a -lboost_system
 LPARSER=-Llib -lsparqlxx-parser

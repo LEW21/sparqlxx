@@ -10,6 +10,8 @@ namespace sparqlxx
 		std::vector<std::vector<Term>> rows;
 
 		Solutions() {}
+		Solutions(std::vector<Var> vars): vars(std::move(vars)) {}
+		Solutions(std::vector<Var> vars, std::vector<std::vector<Term>> rows): vars(vars), rows(rows) {}
 	};
 
 	struct [[gnu::visibility("default")]] None { None() {} };

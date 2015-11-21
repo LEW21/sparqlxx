@@ -17,6 +17,8 @@ namespace sparqlite
 
 		template <typename T>
 		auto _query(const T&) -> sparqlxx::result_of<T>;
+
+		auto match(const sparqlxx::QuadsVP&) const -> sparqlxx::Solutions;
 	};
 }
 
