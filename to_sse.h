@@ -50,7 +50,11 @@ namespace sparqlxx
 
 		inline auto to_sse(const Join& j, int level = 0) -> std::string
 		{
-			return std::string(level, '\t') + "(join\n" + to_sse(j.a, level+1) + to_sse(j.b, level+1) + std::string(level, '\t') + ")\n";
+			auto s = std::string(level, '\t') + "(join\n";
+			for (const auto& subop : j.ops)
+				s += to_sse(subop, level+1);
+			s += std::string(level, '\t') + ")\n";
+			return s;
 		}
 
 		inline auto to_sse(const LeftJoin& j, int level = 0) -> std::string

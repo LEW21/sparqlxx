@@ -25,8 +25,8 @@ namespace sparqlxx
 
 		virtual auto transform(Algebra::Join&& op) -> Algebra::Op
 		{
-			*op.a = (*this)(std::move(*op.a));
-			*op.b = (*this)(std::move(*op.b));
+			for (auto& subop : op.ops)
+				*subop = (*this)(std::move(*subop));
 			return op;
 		}
 

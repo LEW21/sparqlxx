@@ -47,7 +47,11 @@ namespace sparqlite
 
 	inline auto eval(const Dataset& D, const sparqlxx::Algebra::Join& op) -> sparqlxx::Solutions
 	{
-		return join(eval(D, op.a), eval(D, op.b));
+		auto sols = std::vector<Solutions>{};
+		sols.reserve(op.ops.size());
+		for (const auto& subop : op.ops)
+			sols.emplace_back(eval(D, subop));
+		return join(std::move(sols));
 	}
 
 	inline auto eval(const Dataset& D, const sparqlxx::Algebra::LeftJoin& op) -> sparqlxx::Solutions

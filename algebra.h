@@ -51,8 +51,8 @@ namespace sparqlxx
 
 		struct [[gnu::visibility("default")]] Join
 		{
-			AnyOp a, b;
-			Join(AnyOp a, AnyOp b): a(std::move(a)), b(std::move(b)) {}
+			vector<AnyOp> ops;
+			Join(AnyOp a, AnyOp b): ops{std::move(a), std::move(b)} {}
 		};
 
 		struct [[gnu::visibility("default")]] LeftJoin
