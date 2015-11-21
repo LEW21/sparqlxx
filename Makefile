@@ -40,7 +40,7 @@ lib/libsparqlite.so: *.h algebratransformers/*.h lib/libsparqlxx-parser.so sparq
 	rm -f ./lib/libsparqlite.so
 	ln -s libsparqlite.so.0 ./lib/libsparqlite.so
 
-bin/sparql_to_sse: lib/libsparqlxx-parser.so sparql_to_sse/main.cpp
+bin/sparql_to_sse: lib/libsparqlxx-parser.so algebratransformers/*.h sparql_to_sse/main.cpp
 	@test -d bin/ || mkdir -p bin/
 	$(CXX) $(CXXFLAGS) sparql_to_sse/main.cpp $(LPARSER) $(LIBS) -o bin/sparql_to_sse
 
@@ -59,6 +59,17 @@ bin/test_database: *.h tests/test_database.cpp lib/libsparqlite.so
 bin/test_transformers: *.h algebratransformers/*.h tests/test_transformers.cpp
 	@test -d bin/ || mkdir -p bin/
 	$(CXX) $(CXXFLAGS) tests/test_transformers.cpp -ldl $(LIBS) -o bin/test_transformers
+
+DEF_INCLUDEPATH=-I/usr/bin/../lib64/gcc/x86_64-unknown-linux-gnu/5.2.0/../../../../include/c++/5.2.0 -I/usr/bin/../lib64/gcc/x86_64-unknown-linux-gnu/5.2.0/../../../../include/c++/5.2.0/x86_64-unknown-linux-gnu -I/usr/bin/../lib64/gcc/x86_64-unknown-linux-gnu/5.2.0/../../../../include/c++/5.2.0/backward -I/usr/local/include -I/usr/bin/../lib/clang/3.7.0/include -I/usr/include
+
+rdoc:
+	cldoc generate $(CXXFLAGS) -w -DSPARQLXX_DOC -- *.h --output doc
+
+xdoc:
+	cldoc generate $(CXXFLAGS) -w -DSPARQLXX_DOC -- *.h --output doc --static
+
+tdoc:
+	cldoc generate $(CXXFLAGS) -w -DSPARQLXX_DOC -- algebr*.h variantxx/variant.hpp --output xxx
 
 clean:
 	rm -rf bin lib

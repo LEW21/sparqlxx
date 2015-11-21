@@ -1,6 +1,8 @@
 #include "database.h"
 
 #include "../algebratransformers/to_quads.h"
+#include "../algebratransformers/merge_joins.h"
+#include "../algebratransformers/merge_basics.h"
 #include "algebra.h"
 
 namespace sparqlite
@@ -150,7 +152,8 @@ namespace sparqlite
 		if (!op)
 			return {};
 
-		*op = sparqlxx::AlgebraTransformers::to_quads(std::move(*op), sparqlxx::Iri{RIRI::DefaultGraphNode});
+		using namespace sparqlxx::AlgebraTransformers;
+		*op = merge_basics(merge_joins(to_quads(std::move(*op), sparqlxx::Iri{RIRI::DefaultGraphNode})));
 
 		return eval(Dataset{this, s.dataset}, op);
 	}
