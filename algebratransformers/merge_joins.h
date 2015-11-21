@@ -18,13 +18,21 @@ namespace sparqlxx
 					{
 						if (subop->is<Algebra::Join>())
 							handle_join(std::move(subop->get<Algebra::Join>()));
+						else if (subop->is<Algebra::Null>())
+							{}
 						else
 							new_ops.emplace_back(subop);
 					}
 				};
 				handle_join(std::move(op));
 				op.ops = new_ops;
-				return op;
+
+				if (op.ops.size() == 0)
+					return Algebra::Null{};
+				else if (op.ops.size() == 1)
+					return *op.ops[0];
+				else
+					return op;
 			}
 		};
 

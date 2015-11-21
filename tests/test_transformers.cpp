@@ -60,13 +60,13 @@ void test_merge_joins()
 				),
 				Algebra::make<Algebra::Join>(
 					Algebra::make<Algebra::Basic>(TriplesVP{TripleVP{Iri{"a"}, Iri{"b"}, Iri{"f"}}}),
-					Algebra::make<Algebra::Basic>(TriplesVP{TripleVP{Iri{"a"}, Iri{"b"}, Iri{"g"}}})
+					Algebra::make<Algebra::Null>()
 				)
 			)
 		};
-		assert(to_unformatted_sse(op) == "(join (graph <X> (bgp [<a> <b> <c>]) ) (join (join (bgp [<a> <b> <d>]) (bgp [<a> <b> <e>]) ) (join (bgp [<a> <b> <f>]) (bgp [<a> <b> <g>]) ) ) )");
+		assert(to_unformatted_sse(op) == "(join (graph <X> (bgp [<a> <b> <c>]) ) (join (join (bgp [<a> <b> <d>]) (bgp [<a> <b> <e>]) ) (join (bgp [<a> <b> <f>]) (table unit) ) ) )");
 		op = AlgebraTransformers::merge_joins(std::move(op));
-		assert(to_unformatted_sse(op) == "(join (graph <X> (bgp [<a> <b> <c>]) ) (bgp [<a> <b> <d>]) (bgp [<a> <b> <e>]) (bgp [<a> <b> <f>]) (bgp [<a> <b> <g>]) )");
+		assert(to_unformatted_sse(op) == "(join (graph <X> (bgp [<a> <b> <c>]) ) (bgp [<a> <b> <d>]) (bgp [<a> <b> <e>]) (bgp [<a> <b> <f>]) )");
 //		std::cout << to_unformatted_sse(op) << std::endl;
 	}
 }
@@ -103,13 +103,13 @@ void test_qjb()
 				),
 				Algebra::make<Algebra::Join>(
 					Algebra::make<Algebra::Basic>(TriplesVP{TripleVP{Iri{"a"}, Iri{"b"}, Iri{"f"}}}),
-					Algebra::make<Algebra::Basic>(TriplesVP{TripleVP{Iri{"a"}, Iri{"b"}, Iri{"g"}}})
+					Algebra::make<Algebra::Null>()
 				)
 			)
 		};
-		assert(to_unformatted_sse(op) == "(join (graph <X> (bgp [<a> <b> <c>]) ) (join (join (bgp [<a> <b> <d>]) (bgp [<a> <b> <e>]) ) (join (bgp [<a> <b> <f>]) (bgp [<a> <b> <g>]) ) ) )");
+		assert(to_unformatted_sse(op) == "(join (graph <X> (bgp [<a> <b> <c>]) ) (join (join (bgp [<a> <b> <d>]) (bgp [<a> <b> <e>]) ) (join (bgp [<a> <b> <f>]) (table unit) ) ) )");
 		op = AlgebraTransformers::merge_basics(AlgebraTransformers::merge_joins(AlgebraTransformers::to_quads(std::move(op), Iri{"G"})));
-		assert(to_unformatted_sse(op) == "(quadpattern  [<X> <a> <b> <c>] [<G> <a> <b> <d>] [<G> <a> <b> <e>] [<G> <a> <b> <f>] [<G> <a> <b> <g>] )");
+		assert(to_unformatted_sse(op) == "(quadpattern  [<X> <a> <b> <c>] [<G> <a> <b> <d>] [<G> <a> <b> <e>] [<G> <a> <b> <f>] )");
 	}
 }
 
