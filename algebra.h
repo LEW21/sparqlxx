@@ -52,6 +52,7 @@ namespace sparqlxx
 		struct [[gnu::visibility("default")]] Join
 		{
 			vector<AnyOp> ops;
+			Join(std::initializer_list<AnyOp> ops): ops(std::move(ops)) {}
 			Join(AnyOp a, AnyOp b): ops{std::move(a), std::move(b)} {}
 		};
 
