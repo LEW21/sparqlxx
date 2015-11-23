@@ -13,7 +13,8 @@ namespace sparqlxx
 			auto transform(Algebra::Join&& op) -> Algebra::Op override
 			{
 				auto new_ops = std::vector<Algebra::AnyOp>{};
-				std::function<void(Algebra::Join&&)> handle_join = [&new_ops, &handle_join](Algebra::Join&& op) -> void{
+				std::function<void(Algebra::Join&&)> handle_join = [&new_ops, &handle_join](Algebra::Join&& op) -> void
+				{
 					for (auto& subop : op.ops)
 					{
 						if (subop->is<Algebra::Join>())
