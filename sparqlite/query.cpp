@@ -123,20 +123,27 @@ namespace sparqlite
 			mv.add_var(p.graph);
 			S.vars = mv.vars;
 
-			auto rows = stmt.match(Quad{res[p.subject], res[p.predicate], res[p.object], res[p.graph]});
-			S.rows.reserve(rows.size());
-			for (auto r : rows)
+			try
 			{
-				auto q = res.toQuad(r);
-				try
+				auto rows = stmt.match(Quad{res[p.subject], res[p.predicate], res[p.object], res[p.graph]});
+				S.rows.reserve(rows.size());
+				for (auto r : rows)
 				{
-					mv.add_term(q.subject);
-					mv.add_term(q.predicate);
-					mv.add_term(q.object);
-					mv.add_term(q.graph);
-					S.rows.emplace_back(mv.take_row());
+					auto q = res.toQuad(r);
+					try
+					{
+						mv.add_term(q.subject);
+						mv.add_term(q.predicate);
+						mv.add_term(q.object);
+						mv.add_term(q.graph);
+						S.rows.emplace_back(mv.take_row());
+					}
+					catch (Break&) {}
 				}
-				catch (Break&) {}
+			}
+			catch (std::out_of_range&) // thrown by res[p.*]
+			{
+				// Nothing can get matched.
 			}
 
 			solutions.emplace_back(std::move(S));

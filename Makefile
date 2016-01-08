@@ -10,7 +10,7 @@ LREADLINE=-lreadline -DUSE_READLINE
 
 all: lib/libsparqlxx-parser.so lib/libsparqlite.so bin/sparql_to_sse bin/sparql test
 
-test: test_parser_internal test_parse test_database_sparqlite
+test: test_parser_internal test_parse test_transformers test_engine_sparqlite
 
 test_parser_internal: bin/test_parser_internal
 	./bin/test_parser_internal
@@ -20,6 +20,9 @@ test_parse: bin/test_parse
 
 test_transformers: bin/test_transformers
 	LD_LIBRARY_PATH=lib ./bin/test_transformers
+
+test_engine_sparqlite: bin/test_engine
+	LD_LIBRARY_PATH=lib ./bin/test_engine sparqlite
 
 test_database_sparqlite: bin/test_database
 	LD_LIBRARY_PATH=lib ./bin/test_database sparqlite
@@ -52,13 +55,17 @@ bin/test_parse: tests/test_parse.cpp lib/libsparqlxx-parser.so
 	@test -d bin/ || mkdir -p bin/
 	$(CXX) $(CXXFLAGS) tests/test_parse.cpp $(LPARSER) $(LIBS) -o bin/test_parse
 
-bin/test_database: *.h tests/test_database.cpp lib/libsparqlite.so
+bin/test_database: *.h tests/test_database.cpp
 	@test -d bin/ || mkdir -p bin/
 	$(CXX) $(CXXFLAGS) tests/test_database.cpp -ldl $(LPARSER) $(LIBS) -o bin/test_database
 
 bin/test_transformers: *.h algebratransformers/*.h tests/test_transformers.cpp
 	@test -d bin/ || mkdir -p bin/
 	$(CXX) $(CXXFLAGS) tests/test_transformers.cpp -ldl $(LIBS) -o bin/test_transformers
+
+bin/test_engine: *.h tests/test_engine.cpp
+	@test -d bin/ || mkdir -p bin/
+	$(CXX) $(CXXFLAGS) tests/test_engine.cpp -ldl $(LPARSER) $(LIBS) -o bin/test_engine
 
 DEF_INCLUDEPATH=-I/usr/bin/../lib64/gcc/x86_64-unknown-linux-gnu/5.2.0/../../../../include/c++/5.2.0 -I/usr/bin/../lib64/gcc/x86_64-unknown-linux-gnu/5.2.0/../../../../include/c++/5.2.0/x86_64-unknown-linux-gnu -I/usr/bin/../lib64/gcc/x86_64-unknown-linux-gnu/5.2.0/../../../../include/c++/5.2.0/backward -I/usr/local/include -I/usr/bin/../lib/clang/3.7.0/include -I/usr/include
 
