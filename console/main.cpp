@@ -164,6 +164,8 @@ int main(int argc, char** argv)
 			auto r = db.query(q);
 			if (r.is<sparqlxx::Solutions>())
 				dump(r.get<sparqlxx::Solutions>());
+			else if (r.is<bool>())
+				cout << (r.get<bool>() ? "True." : "False.") << endl;
 			else
 				cout << "OK" << endl;
 

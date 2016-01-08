@@ -167,6 +167,16 @@ namespace sparqlite
 	}
 
 	template <>
+	auto Database::_query<sparqlxx::Ask>(const sparqlxx::Ask& a) -> bool
+	{
+		auto res = _query(sparqlxx::Select{a.dataset, a.op});
+		if (res.rows.size())
+			return true;
+		else
+			return false;
+	}
+
+	template <>
 	auto Database::_query<sparqlxx::Describe>(const sparqlxx::Describe&) -> sparqlxx::Triples
 	{
 		auto out = sparqlxx::Triples{};

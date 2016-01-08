@@ -11,6 +11,9 @@ namespace sparqlite
 		if (q.is<sparqlxx::Select>())
 			return _query(q.get<sparqlxx::Select>());
 
+		if (q.is<sparqlxx::Ask>())
+			return _query(q.get<sparqlxx::Ask>());
+
 		if (q.is<sparqlxx::Describe>())
 			return _query(q.get<sparqlxx::Describe>());
 

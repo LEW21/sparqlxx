@@ -55,11 +55,51 @@ void test_insert_select_two_patterns(char* dsn)
 	assert(res.rows[0][1].get<Iri>() == Iri{"http://lew21.net/exampletype"});
 }
 
+void test_ask(char* dsn)
+{
+	auto db = Database{dsn};
+
+	db.query(R"(
+		PREFIX owl: <http://www.w3.org/2002/07/owl#>
+		INSERT DATA {
+			<isIn> a owl:TransitiveProperty.
+			<Warsaw> <isIn> <Poland>.
+			<Poland> <isIn> <Europe>.
+		})");
+
+	auto res = db.query("ASK { <Warsaw> <isIn> <Poland>. }");
+	assert(res.is<bool>());
+	assert(res.get<bool>() == true);
+
+	res = db.query("ASK { <Warsaw> <isIn> <Asia>. }");
+	assert(res.is<bool>());
+	assert(res.get<bool>() == false);
+}
+
+void test_ask_reasoner(char* dsn)
+{
+	auto db = Database{dsn};
+
+	db.query(R"(
+		PREFIX owl: <http://www.w3.org/2002/07/owl#>
+		INSERT DATA {
+			<isIn> a owl:TransitiveProperty.
+			<Warsaw> <isIn> <Poland>.
+			<Poland> <isIn> <Europe>.
+		})");
+
+	auto res = db.query("ASK { <Warsaw> <isIn> <Europe>. }");
+	assert(res.is<bool>());
+	assert(res.get<bool>() == true);
+}
+
 int main(int argc, char** argv)
 {
 	assert(argc >= 2);
 	test_insert_select_match(argv[1]);
 	test_insert_select_nomatch(argv[1]);
 	test_insert_select_two_patterns(argv[1]);
+	test_ask(argv[1]);
+	test_ask_reasoner(argv[1]);
 	return 0;
 }
