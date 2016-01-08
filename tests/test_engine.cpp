@@ -93,6 +93,30 @@ void test_ask_reasoner(char* dsn)
 	assert(res.get<bool>() == true);
 }
 
+void test_insert_delete(char* dsn)
+{
+	auto db = Database{dsn};
+
+	auto res = db.query("ASK { <Warsaw> <isIn> <Poland>. }");
+	assert(res.is<bool>() && res.get<bool>() == false);
+
+	db.query(R"(
+		INSERT DATA {
+			<Warsaw> <isIn> <Poland>.
+		})");
+
+	res = db.query("ASK { <Warsaw> <isIn> <Poland>. }");
+	assert(res.is<bool>() && res.get<bool>() == true);
+
+	db.query(R"(
+		DELETE DATA {
+			<Warsaw> <isIn> <Poland>.
+		})");
+
+	res = db.query("ASK { <Warsaw> <isIn> <Poland>. }");
+	assert(res.is<bool>() && res.get<bool>() == false);
+}
+
 int main(int argc, char** argv)
 {
 	assert(argc >= 2);
@@ -101,5 +125,6 @@ int main(int argc, char** argv)
 	test_insert_select_two_patterns(argv[1]);
 	test_ask(argv[1]);
 	test_ask_reasoner(argv[1]);
+	test_insert_delete(argv[1]);
 	return 0;
 }
