@@ -76,14 +76,17 @@ namespace sparqlite
 				++i;
 			}
 
-			auto take_row() -> std::vector<Term>
+			void reset()
 			{
-				auto row = std::move(nr);
 				nr = {};
 				nr.reserve(vars.size());
 				i = 0;
-				assert(row.size() == vars.size());
-				return row;
+			}
+
+			auto take_row() -> std::vector<Term>
+			{
+				assert(nr.size() == vars.size());
+				return std::move(nr);
 			}
 		};
 
@@ -111,6 +114,7 @@ namespace sparqlite
 						S.rows.emplace_back(mv.take_row());
 					}
 					catch (Break&) {}
+					mv.reset();
 				}
 			}
 

@@ -139,6 +139,7 @@ namespace sparqlite
 						S.rows.emplace_back(mv.take_row());
 					}
 					catch (Break&) {}
+					mv.reset();
 				}
 			}
 			catch (std::out_of_range&) // thrown by res[p.*]
