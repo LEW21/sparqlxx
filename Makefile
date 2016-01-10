@@ -42,7 +42,7 @@ bin/test_parser_internal: *.h parser/*.h parser/tokenize.cpp parser/parse.cpp pa
 
 lib/libsparqlite.so: *.h algebratransformers/*.h lib/libsparqlxx-parser.so sparqlite/*.h sparqlite/*.cpp
 	@test -d lib/ || mkdir -p lib/
-	$(CXX) $(CXXFLAGS) $(LIBFLAGS) sparqlite/database.cpp sparqlite/query.cpp sparqlite/update.cpp sparqlite/think.cpp $(LPARSER) -Wl,-soname,libsparqlite.so.0 -o ./lib/libsparqlite.so.0
+	$(CXX) $(CXXFLAGS) $(LIBFLAGS) sparqlite/database.cpp sparqlite/query.cpp sparqlite/update.cpp sparqlite/think.cpp $(LPARSER) -lboost_serialization -Wl,-soname,libsparqlite.so.0 -o ./lib/libsparqlite.so.0
 	rm -f ./lib/libsparqlite.so
 	ln -s libsparqlite.so.0 ./lib/libsparqlite.so
 

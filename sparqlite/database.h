@@ -7,12 +7,18 @@
 
 namespace sparqlite
 {
-	struct [[gnu::visibility("default")]] Database: public sparqlxx::DatabaseImpl
+	class [[gnu::visibility("default")]] Database: public sparqlxx::DatabaseImpl
 	{
+		std::string path;
+
+		void load();
+		void save();
+
+	public:
 		Resources res;
 		Statements stmt;
 
-		Database();
+		Database(const char* dsn = nullptr);
 		auto query(const sparqlxx::SPARQL&) -> sparqlxx::Result override;
 
 		template <typename T>
