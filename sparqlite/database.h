@@ -23,3 +23,16 @@ namespace sparqlite
 }
 
 extern "C" [[gnu::visibility("default")]] auto sparqlite_init_db(const char* iri) -> sparqlxx::DatabaseImpl*;
+
+namespace boost
+{
+	namespace serialization
+	{
+		template <class Archive>
+		void serialize(Archive& ar, sparqlite::Database& r, const unsigned int)
+		{
+			ar & r.res;
+			ar & r.stmt;
+		}
+	}
+}

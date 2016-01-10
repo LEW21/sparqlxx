@@ -10,7 +10,7 @@ LREADLINE=-lreadline -DUSE_READLINE
 
 all: lib/libsparqlxx-parser.so lib/libsparqlite.so bin/sparql_to_sse bin/sparql test
 
-test: test_parser_internal test_parse test_transformers test_engine_sparqlite
+test: test_parser_internal test_parse test_transformers test_engine_sparqlite test_sparqlite_internal
 
 test_parser_internal: bin/test_parser_internal
 	./bin/test_parser_internal
@@ -26,6 +26,9 @@ test_engine_sparqlite: bin/test_engine
 
 test_database_sparqlite: bin/test_database
 	LD_LIBRARY_PATH=lib ./bin/test_database sparqlite
+
+test_sparqlite_internal: bin/test_sparqlite_internal
+	LD_LIBRARY_PATH=lib ./bin/test_sparqlite_internal
 
 lib/libsparqlxx-parser.so: *.h parser/*.h parser/tokenize.cpp parser/parse.cpp parser/read_*.cpp
 	@test -d lib/ || mkdir -p lib/
@@ -66,6 +69,10 @@ bin/test_transformers: *.h algebratransformers/*.h tests/test_transformers.cpp
 bin/test_engine: *.h tests/test_engine.cpp
 	@test -d bin/ || mkdir -p bin/
 	$(CXX) $(CXXFLAGS) tests/test_engine.cpp -ldl $(LPARSER) $(LIBS) -o bin/test_engine
+
+bin/test_sparqlite_internal: *.h sparqlite/*.h sparqlite/test.cpp
+	@test -d bin/ || mkdir -p bin/
+	$(CXX) $(CXXFLAGS) sparqlite/test.cpp -ldl $(LPARSER) $(LIBS) -lboost_serialization -lsparqlite -o bin/test_sparqlite_internal
 
 DEF_INCLUDEPATH=-I/usr/bin/../lib64/gcc/x86_64-unknown-linux-gnu/5.2.0/../../../../include/c++/5.2.0 -I/usr/bin/../lib64/gcc/x86_64-unknown-linux-gnu/5.2.0/../../../../include/c++/5.2.0/x86_64-unknown-linux-gnu -I/usr/bin/../lib64/gcc/x86_64-unknown-linux-gnu/5.2.0/../../../../include/c++/5.2.0/backward -I/usr/local/include -I/usr/bin/../lib/clang/3.7.0/include -I/usr/include
 

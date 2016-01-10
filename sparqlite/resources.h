@@ -4,6 +4,8 @@
 #include "../parse.h"
 #include "quad.h"
 #include <unordered_map>
+#include <boost/serialization/split_free.hpp>
+#include <boost/serialization/vector.hpp>
 
 #include "R.h"
 
@@ -45,12 +47,46 @@ namespace std
 	};
 }
 
+namespace boost
+{
+	namespace serialization
+	{
+		template <class Archive>
+		void serialize(Archive& ar, sparqlite::Resource& r, const unsigned int)
+		{
+			ar & r.type;
+			ar & r.value;
+		}
+	}
+}
+
+namespace sparqlite
+{
+	class Resources;
+}
+
+namespace boost
+{
+	namespace serialization
+	{
+		template <class Archive>
+		void save(Archive& ar, const sparqlite::Resources& r, const unsigned int);
+		template <class Archive>
+		void load(Archive& ar, sparqlite::Resources& r, const unsigned int);
+	}
+}
+
 namespace sparqlite
 {
 	class Resources
 	{
 		std::vector<Resource> byID;
 		std::unordered_map<Resource, ID> byRes;
+
+		template <class Archive>
+		friend void boost::serialization::save(Archive& ar, const sparqlite::Resources& r, const unsigned int);
+		template <class Archive>
+		friend void boost::serialization::load(Archive& ar, sparqlite::Resources& r, const unsigned int);
 
 	public:
 		inline Resources();
@@ -256,5 +292,30 @@ namespace sparqlite
 		if (!r.type)
 			return std::string{"_:x"} + std::to_string(id);
 		return to_sparql(toTerm(id));
+	}
+}
+
+BOOST_SERIALIZATION_SPLIT_FREE(sparqlite::Resources)
+
+namespace boost
+{
+	namespace serialization
+	{
+		template <class Archive>
+		void save(Archive& ar, const sparqlite::Resources& r, const unsigned int)
+		{
+			ar & r.byID;
+		}
+
+		template <class Archive>
+		void load(Archive& ar, sparqlite::Resources& r, const unsigned int)
+		{
+			ar & r.byID;
+
+			r.byRes = {};
+			for (auto i = 0; i < r.byID.size(); ++i)
+				if (r.byID[i])
+					r.byRes[r.byID[i]] = i;
+		}
 	}
 }

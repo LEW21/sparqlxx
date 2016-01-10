@@ -4,6 +4,8 @@
 #include <unordered_set>
 #include <unordered_map>
 #include "quad.h"
+#include <boost/serialization/unordered_set.hpp>
+#include <boost/serialization/unordered_map.hpp>
 
 namespace sparqlite
 {
@@ -53,6 +55,36 @@ namespace std
 			return get<0>(p) ^ get<1>(p) ^ get<2>(p) ^ get<3>(p);
 		}
 	};
+}
+
+namespace boost
+{
+	namespace serialization
+	{
+		template <class Archive>
+		void serialize(Archive& ar, sparqlite::P2& t, const unsigned int)
+		{
+			ar & std::get<0>(t);
+			ar & std::get<1>(t);
+		}
+
+		template <class Archive>
+		void serialize(Archive& ar, sparqlite::P3& t, const unsigned int)
+		{
+			ar & std::get<0>(t);
+			ar & std::get<1>(t);
+			ar & std::get<2>(t);
+		}
+
+		template <class Archive>
+		void serialize(Archive& ar, sparqlite::P4& t, const unsigned int)
+		{
+			ar & std::get<0>(t);
+			ar & std::get<1>(t);
+			ar & std::get<2>(t);
+			ar & std::get<3>(t);
+		}
+	}
 }
 
 namespace sparqlite
@@ -237,6 +269,37 @@ namespace sparqlite
 							return all;
 				}
 			}
+		}
+	}
+}
+
+namespace boost
+{
+	namespace serialization
+	{
+		template <class Archive>
+		void serialize(Archive& ar, sparqlite::Statements& s, const unsigned int)
+		{
+			ar & s.all;
+
+			ar & s.byS;
+			ar & s.byP;
+			ar & s.byO;
+			ar & s.byG;
+
+			ar & s.bySP;
+			ar & s.bySO;
+			ar & s.bySG;
+			ar & s.byPO;
+			ar & s.byPG;
+			ar & s.byOG;
+
+			ar & s.bySPO;
+			ar & s.bySPG;
+			ar & s.bySOG;
+			ar & s.byPOG;
+
+			ar & s.bySPOG;
 		}
 	}
 }
