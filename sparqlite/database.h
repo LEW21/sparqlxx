@@ -16,7 +16,10 @@ namespace sparqlite
 		auto query(const sparqlxx::SPARQL&) -> sparqlxx::Result override;
 
 		template <typename T>
-		auto _query(const T&) -> sparqlxx::result_of<T>;
+		auto _query(const T&) const -> sparqlxx::result_of<T>;
+
+		template <typename T>
+		auto _update(const T&) -> sparqlxx::result_of<T>;
 
 		auto match(const sparqlxx::QuadsVP&) const -> sparqlxx::Solutions;
 	};

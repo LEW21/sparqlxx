@@ -52,7 +52,7 @@ namespace sparqlite
 	}
 
 	template <>
-	auto Database::_query<sparqlxx::InsertData>(const sparqlxx::InsertData& id) -> sparqlxx::None
+	auto Database::_update<sparqlxx::InsertData>(const sparqlxx::InsertData& id) -> sparqlxx::None
 	{
 		auto blanks = std::unordered_map<std::string, ID>{};
 
@@ -84,7 +84,7 @@ namespace sparqlite
 	}
 
 	template <>
-	auto Database::_query<sparqlxx::DeleteData>(const sparqlxx::DeleteData& dd) -> sparqlxx::None
+	auto Database::_update<sparqlxx::DeleteData>(const sparqlxx::DeleteData& dd) -> sparqlxx::None
 	{
 		for (const auto& sq : dd.data)
 		{

@@ -18,10 +18,10 @@ namespace sparqlite
 			return _query(q.get<sparqlxx::Describe>());
 
 		if (q.is<sparqlxx::InsertData>())
-			return _query(q.get<sparqlxx::InsertData>());
+			return _update(q.get<sparqlxx::InsertData>());
 
 		if (q.is<sparqlxx::DeleteData>())
-			return _query(q.get<sparqlxx::DeleteData>());
+			return _update(q.get<sparqlxx::DeleteData>());
 
 		return sparqlxx::None{};
 	}

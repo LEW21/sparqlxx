@@ -11,10 +11,10 @@ namespace sparqlite
 
 	struct Dataset
 	{
-		Database* database;
+		const Database* database;
 		sparqlxx::Dataset dataset;
 
-		Dataset(Database* database, sparqlxx::Dataset dataset): database(database), dataset(dataset) {}
+		Dataset(const Database* database, sparqlxx::Dataset dataset): database(database), dataset(dataset) {}
 
 		auto match(const sparqlxx::QuadsVP& p) const -> sparqlxx::Solutions
 		{
@@ -153,7 +153,7 @@ namespace sparqlite
 	}
 
 	template <>
-	auto Database::_query<sparqlxx::Select>(const sparqlxx::Select& s) -> sparqlxx::Solutions
+	auto Database::_query<sparqlxx::Select>(const sparqlxx::Select& s) const -> sparqlxx::Solutions
 	{
 		auto op = s.op;
 
@@ -167,7 +167,7 @@ namespace sparqlite
 	}
 
 	template <>
-	auto Database::_query<sparqlxx::Ask>(const sparqlxx::Ask& a) -> bool
+	auto Database::_query<sparqlxx::Ask>(const sparqlxx::Ask& a) const -> bool
 	{
 		auto res = _query(sparqlxx::Select{a.dataset, a.op});
 		if (res.rows.size())
@@ -177,7 +177,7 @@ namespace sparqlite
 	}
 
 	template <>
-	auto Database::_query<sparqlxx::Describe>(const sparqlxx::Describe&) -> sparqlxx::Triples
+	auto Database::_query<sparqlxx::Describe>(const sparqlxx::Describe&) const -> sparqlxx::Triples
 	{
 		auto out = sparqlxx::Triples{};
 		for (auto s : stmt.all)
