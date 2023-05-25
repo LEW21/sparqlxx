@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../algebratransformer.h"
+#include <functional>
 
 namespace sparqlxx
 {

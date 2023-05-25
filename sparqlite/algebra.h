@@ -201,7 +201,7 @@ namespace sparqlite
 			return S;
 		}
 
-		inline auto slice(Solutions&& s, int start, boost::optional<int> length) -> Solutions
+		inline auto slice(Solutions&& s, int start, std::optional<int> length) -> Solutions
 		{
 			auto b = s.rows.begin() + start;
 			auto e = length ? (start + *length < s.rows.size() ? b + *length : s.rows.end()) : s.rows.end();

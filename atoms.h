@@ -2,15 +2,17 @@
 
 #include <string>
 #include <vector>
-#include <boost/optional.hpp>
+#include <optional>
+#include <stdexcept>
+#include <boost/assert.hpp>
 
 namespace sparqlxx
 {
 	using std::string;
 	using std::vector;
-	using boost::optional;
-	using boost::make_optional;
-	/*constexpr*/ const auto nullopt = boost::none;
+	using std::optional;
+	using std::make_optional;
+	using std::nullopt;
 
 	struct [[gnu::visibility("default")]] Var
 	{
