@@ -2,6 +2,7 @@
 
 #include "../atoms.h"
 #include "token_stream.h"
+#include "url.h"
 
 namespace sparqlxx
 {
@@ -84,7 +85,7 @@ namespace sparqlxx
 		auto t = *token++;
 
 		if (t[0] == '<') // IRIREF
-			return Iri{t.substr(1, t.size() - 2)}.resolve(base);
+			return Iri{URL(t.substr(1, t.size() - 2), base ? std::optional(URL(base->iri)) : std::nullopt).href()};
 
 		// PrefixedName
 		auto colon_pos = t.find(':');

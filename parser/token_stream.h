@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <optional>
 #include "../atoms.h"
 
 namespace sparqlxx
@@ -67,7 +68,7 @@ namespace sparqlxx
 	{
 		debug_range<range<vector<string>::const_iterator>> token;
 
-		Iri base;
+		std::optional<Iri> base;
 		unordered_map<string, Iri> prefixes;
 
 		auto error()

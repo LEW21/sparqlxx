@@ -1,7 +1,7 @@
 CXX=clang++
-CXXFLAGS=-Wall -Werror -Wextra -pedantic -Wno-char-subscripts -Wno-sign-compare -Wno-unknown-pragmas -Wno-error=unused-parameter -g -std=c++14 -Iuri/src/ -fdiagnostics-color -Wl,-E
+CXXFLAGS=-Wall -Werror -Wextra -pedantic -Wno-char-subscripts -Wno-sign-compare -Wno-unknown-pragmas -Wno-error=unused-parameter -g -std=c++17 -Iuri/src/ -fdiagnostics-color -Wl,-E
 LIBFLAGS=-shared -fPIC -fvisibility=hidden
-LIBS=uri/_build/src/libnetwork-uri.a -lboost_system
+LIBS=-lboost_system
 LPARSER=-Llib -lsparqlxx-parser
 LREADLINE=-lreadline -DUSE_READLINE
 #LREADLINE=
@@ -30,13 +30,13 @@ test_database_sparqlite: bin/test_database
 test_sparqlite_internal: bin/test_sparqlite_internal
 	LD_LIBRARY_PATH=lib ./bin/test_sparqlite_internal
 
-lib/libsparqlxx-parser.so: *.h parser/*.h parser/tokenize.cpp parser/parse.cpp parser/read_*.cpp
+lib/libsparqlxx-parser.so: *.h parser/*.h parser/tokenize.cpp parser/parse.cpp parser/read_*.cpp parser/url.cpp
 	@test -d lib/ || mkdir -p lib/
-	$(CXX) $(CXXFLAGS) $(LIBFLAGS) parser/tokenize.cpp parser/parse.cpp parser/read_*.cpp -Wl,-soname,libsparqlxx-parser.so.0 -o ./lib/libsparqlxx-parser.so.0
+	$(CXX) $(CXXFLAGS) $(LIBFLAGS) parser/tokenize.cpp parser/parse.cpp parser/read_*.cpp parser/url.cpp -Wl,-soname,libsparqlxx-parser.so.0 -o ./lib/libsparqlxx-parser.so.0
 	rm -f ./lib/libsparqlxx-parser.so
 	ln -s libsparqlxx-parser.so.0 ./lib/libsparqlxx-parser.so
 
-bin/test_parser_internal: *.h parser/*.h parser/tokenize.cpp parser/parse.cpp parser/read_*.cpp parser/test.cpp
+bin/test_parser_internal: *.h parser/*.h parser/*.cpp
 	@test -d bin/ || mkdir -p bin/
 	$(CXX) $(CXXFLAGS) parser/*.cpp $(LIBS) -o bin/test_parser_internal
 

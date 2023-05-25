@@ -2,13 +2,6 @@
 
 #include <string>
 #include <vector>
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wunused-parameter"
-#include <network/uri.hpp>
-#pragma clang diagnostic pop
-#pragma GCC diagnostic pop
 #include <boost/optional.hpp>
 
 namespace sparqlxx
@@ -41,40 +34,18 @@ namespace sparqlxx
 		return '?' + v.name;
 	}
 
-	#ifdef SPARQLXX_DOC
-	#define _parse_uri(x) network::uri{}
-	#else
-	inline auto _parse_uri(const std::string& iri) -> network::uri
-	{
-		try
-		{
-			return network::uri{iri};
-		}
-		// It really sux we need to do this.
-		catch (network::uri_syntax_error&)
-		{
-			return network::uri_builder().path(iri).uri();
-		}
-	}
-	#endif
-
 	struct [[gnu::visibility("default")]] Iri
 	{
-		network::uri iri;
+		std::string iri;
 
 		Iri() {}
-		Iri(const std::string& iri): iri(_parse_uri(iri)) {}
-		Iri(std::string&& iri): iri(_parse_uri(std::move(iri))) {}
-
-		explicit Iri(const network::uri& iri): iri(iri) {}
-		explicit Iri(network::uri&& iri): iri(std::move(iri)) {}
-
-		auto resolve(const Iri& base) -> Iri { return Iri{iri.resolve(base.iri)}; }
+		Iri(const std::string& iri): iri(iri) {}
+		Iri(std::string&& iri): iri(std::move(iri)) {}
 	};
 
 	inline auto to_string(const Iri& v) -> std::string
 	{
-		return v.iri.to_string<char>();
+		return v.iri;
 	}
 
 	inline auto to_sparql(const Iri& v) -> std::string
@@ -85,7 +56,6 @@ namespace sparqlxx
 		return "<" + to_string(v) + ">";
 	}
 
-	// Note: network::uri sux, operator== crashes if any IRI is invalid (even when they're ==).
 	inline bool operator==(const Iri& a, const Iri& b) { return to_string(a) == to_string(b); }
 	inline bool operator!=(const Iri& a, const Iri& b) { return !(a == b); }
 
