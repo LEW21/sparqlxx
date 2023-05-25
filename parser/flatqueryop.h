@@ -1,6 +1,5 @@
 #pragma once
 
-#include <boost/optional.hpp>
 #include <vector>
 #include "../atoms.h"
 #include "../triples.h"
