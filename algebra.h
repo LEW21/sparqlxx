@@ -134,7 +134,7 @@ namespace sparqlxx
 		template <typename T, typename... A>
 		inline auto make(A&&... arg) -> AnyOp
 		{
-			return std::make_unique<Op>(xx::in_place<T>, std::forward<A>(arg)...);
+			return std::make_unique<Op>(std::in_place_type<T>, std::forward<A>(arg)...);
 		}
 	}
 }
