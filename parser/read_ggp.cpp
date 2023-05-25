@@ -99,10 +99,17 @@ inline auto parseGraphPatternNotTriples(token_stream& t, AnyOp&& gp) -> AnyOp
 		return make<Minus>(std::move(gp), t.read<GroupGraphPattern>());
 
 	if (t.try_match("GRAPH"))
-		return make<Join>(std::move(gp), make<Graph>(t.read<VarOrIri>(), t.read<GroupGraphPattern>()));
+	{
+		auto graph = t.read<VarOrIri>();
+		return make<Join>(std::move(gp), make<Graph>(std::move(graph), t.read<GroupGraphPattern>()));
+	}
 
 	if (t.try_match("SERVICE"))
-		return make<Join>(std::move(gp), make<Service>(t.try_match("SILENT"), t.read<VarOrIri>(), t.read<GroupGraphPattern>()));
+	{
+		auto silent = t.try_match("SILENT");
+		auto iri = t.read<VarOrIri>();
+		return make<Join>(std::move(gp), make<Service>(silent, iri, t.read<GroupGraphPattern>()));
+	}
 
 	if (t.try_match("FILTER"))
 		throw std::logic_error("FILTER is handled in parseGroupGraphPatternSub.");
