@@ -4,7 +4,6 @@
 #include <vector>
 #include <optional>
 #include <stdexcept>
-#include <boost/assert.hpp>
 
 namespace sparqlxx
 {

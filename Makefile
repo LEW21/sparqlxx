@@ -2,7 +2,7 @@ CXX=g++
 #CXX=clang++
 CXXFLAGS=-Wall -Werror -Wextra -pedantic -Wno-char-subscripts -Wno-sign-compare -Wno-unknown-pragmas -Wno-error=unused-parameter -g -std=c++20 -fdiagnostics-color -Wl,-E
 LIBFLAGS=-shared -fPIC -fvisibility=hidden
-LIBS=-lboost_system
+LIBS=
 LPARSER=-Llib -lsparqlxx-parser
 LREADLINE=-lreadline -DUSE_READLINE
 #LREADLINE=
