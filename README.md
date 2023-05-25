@@ -17,44 +17,46 @@ Simple implementation of SPARQL RDF database with builtin RDFS/OWL reasoner.
 	% make
 	% export LD_LIBRARY_PATH=./lib
 	% ./bin/sparql
-	sparqlite> PREFIX owl: <http://www.w3.org/2002/07/owl#>
+	sparqlite> BASE <tag:xtreeme.org,2020:tests>
+		PREFIX owl: <http://www.w3.org/2002/07/owl#>
 		INSERT DATA {
-			<isIn> a owl:TransitiveProperty.
-			<Warsaw> <isIn> <Poland>.
-			<Poland> <isIn> <Europe>.
+			<#isIn> a owl:TransitiveProperty.
+			<#Warsaw> <#isIn> <#Poland>.
+			<#Poland> <#isIn> <#Europe>.
 		}
 	OK
 
 With the given data, it will infer that:
 
-	</Warsaw> </isIn> </Europe>.
+	<#Warsaw> <#isIn> <#Europe>.
 
 You can see it with:
 
-	sparqlite> SELECT * WHERE { <Warsaw> <isIn> ?what }
+	sparqlite> BASE <tag:xtreeme.org,2020:tests>
+		SELECT * WHERE { <#Warsaw> <#isIn> ?what }
 	?what 
-	</Poland> 
-	</Europe> 
+	<tag:xtreeme.org,2020:tests#Poland>
+	<tag:xtreeme.org,2020:tests#Europe>
 
 Or you can select everything, including the metadata about the reasoning process:
 
 	sparqlite> SELECT * { ?s ?p ?o }
 	?s ?p ?o 
-	"</isIn> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#TransitiveProperty> <urn:x-arq:DefaultGraphNode>"^^<http://xtreeme.org/#statement> <http://xtreeme.org/#source> _:x25 
-	_:x25 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xtreeme.org/#Insertion> 
-	</isIn> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#TransitiveProperty> 
-	"</Warsaw> </isIn> </Poland> <urn:x-arq:DefaultGraphNode>"^^<http://xtreeme.org/#statement> <http://xtreeme.org/#source> _:x31 
-	_:x31 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xtreeme.org/#Insertion> 
-	_:x40 <http://xtreeme.org/#inferredFrom> "</Poland> </isIn> </Europe> <urn:x-arq:DefaultGraphNode>"^^<http://xtreeme.org/#statement> 
-	_:x40 <http://xtreeme.org/#inferredFrom> "</Warsaw> </isIn> </Poland> <urn:x-arq:DefaultGraphNode>"^^<http://xtreeme.org/#statement> 
-	_:x40 <http://xtreeme.org/#inferredFrom> "</isIn> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#TransitiveProperty> <urn:x-arq:DefaultGraphNode>"^^<http://xtreeme.org/#statement> 
-	</Warsaw> </isIn> </Europe> 
-	_:x40 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xtreeme.org/#Inference> 
-	"</Warsaw> </isIn> </Europe> <urn:x-arq:DefaultGraphNode>"^^<http://xtreeme.org/#statement> <http://xtreeme.org/#source> _:x40 
-	</Warsaw> </isIn> </Poland> 
-	</Poland> </isIn> </Europe> 
-	_:x36 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xtreeme.org/#Insertion> 
-	"</Poland> </isIn> </Europe> <urn:x-arq:DefaultGraphNode>"^^<http://xtreeme.org/#statement> <http://xtreeme.org/#source> _:x36 
+	"<tag:xtreeme.org,2020:tests#isIn> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#TransitiveProperty> <urn:x-arq:DefaultGraphNode>"^^<http://xtreeme.org/#statement> <http://xtreeme.org/#source> _:x25 
+_:x25 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xtreeme.org/#Insertion> 
+<tag:xtreeme.org,2020:tests#Warsaw> <tag:xtreeme.org,2020:tests#isIn> <tag:xtreeme.org,2020:tests#Europe> 
+_:x40 <http://xtreeme.org/#inferredFrom> "<tag:xtreeme.org,2020:tests#Warsaw> <tag:xtreeme.org,2020:tests#isIn> <tag:xtreeme.org,2020:tests#Poland> <urn:x-arq:DefaultGraphNode>"^^<http://xtreeme.org/#statement> 
+"<tag:xtreeme.org,2020:tests#Warsaw> <tag:xtreeme.org,2020:tests#isIn> <tag:xtreeme.org,2020:tests#Poland> <urn:x-arq:DefaultGraphNode>"^^<http://xtreeme.org/#statement> <http://xtreeme.org/#source> _:x31 
+_:x40 <http://xtreeme.org/#inferredFrom> "<tag:xtreeme.org,2020:tests#isIn> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#TransitiveProperty> <urn:x-arq:DefaultGraphNode>"^^<http://xtreeme.org/#statement> 
+_:x40 <http://xtreeme.org/#inferredFrom> "<tag:xtreeme.org,2020:tests#Poland> <tag:xtreeme.org,2020:tests#isIn> <tag:xtreeme.org,2020:tests#Europe> <urn:x-arq:DefaultGraphNode>"^^<http://xtreeme.org/#statement> 
+<tag:xtreeme.org,2020:tests#Warsaw> <tag:xtreeme.org,2020:tests#isIn> <tag:xtreeme.org,2020:tests#Poland> 
+_:x40 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xtreeme.org/#Inference> 
+"<tag:xtreeme.org,2020:tests#Warsaw> <tag:xtreeme.org,2020:tests#isIn> <tag:xtreeme.org,2020:tests#Europe> <urn:x-arq:DefaultGraphNode>"^^<http://xtreeme.org/#statement> <http://xtreeme.org/#source> _:x40 
+<tag:xtreeme.org,2020:tests#Poland> <tag:xtreeme.org,2020:tests#isIn> <tag:xtreeme.org,2020:tests#Europe> 
+_:x36 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xtreeme.org/#Insertion> 
+"<tag:xtreeme.org,2020:tests#Poland> <tag:xtreeme.org,2020:tests#isIn> <tag:xtreeme.org,2020:tests#Europe> <urn:x-arq:DefaultGraphNode>"^^<http://xtreeme.org/#statement> <http://xtreeme.org/#source> _:x36 
+<tag:xtreeme.org,2020:tests#isIn> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#TransitiveProperty> 
+_:x31 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xtreeme.org/#Insertion>
 
 ## License - GNU AGPLv3
 Copyright (C) 2010 - 2015 Janusz Lewandowski

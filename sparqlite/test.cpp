@@ -17,10 +17,11 @@ void test_serialization()
 	Database a;
 
 	a.query(sparqlxx::parse(R"(
+		BASE <tag:xtreeme.org,2020:tests>
 		PREFIX owl: <http://www.w3.org/2002/07/owl#>
 		INSERT DATA {
-			<Warsaw> <isIn> <Poland>.
-			<Poland> <isIn> <Europe>.
+			<#Warsaw> <#isIn> <#Poland>.
+			<#Poland> <#isIn> <#Europe>.
 		})"));
 
 	{
@@ -34,21 +35,21 @@ void test_serialization()
 		ia >> b;
 	}
 
-	auto s = b.query(sparqlxx::parse("SELECT * { <Warsaw> <isIn> ?y }")).get<sparqlxx::Solutions>();
+	auto s = b.query(sparqlxx::parse("BASE <tag:xtreeme.org,2020:tests> SELECT * { <#Warsaw> <#isIn> ?y }")).get<sparqlxx::Solutions>();
 	assert(s.vars.size() == 1);
 	assert(s.vars[0] == sparqlxx::Var{"y"});
 	assert(s.rows.size() == 1);
 	assert(s.rows[0].size() == 1);
 	assert(s.rows[0][0].is<sparqlxx::Iri>());
-	assert(s.rows[0][0].get<sparqlxx::Iri>() == sparqlxx::Iri{"/Poland"});
+	assert(s.rows[0][0].get<sparqlxx::Iri>() == sparqlxx::Iri{"tag:xtreeme.org,2020:tests#Poland"});
 
-	s = b.query(sparqlxx::parse("SELECT * { <Poland> <isIn> ?y }")).get<sparqlxx::Solutions>();
+	s = b.query(sparqlxx::parse("BASE <tag:xtreeme.org,2020:tests> SELECT * { <#Poland> <#isIn> ?y }")).get<sparqlxx::Solutions>();
 	assert(s.vars.size() == 1);
 	assert(s.vars[0] == sparqlxx::Var{"y"});
 	assert(s.rows.size() == 1);
 	assert(s.rows[0].size() == 1);
 	assert(s.rows[0][0].is<sparqlxx::Iri>());
-	assert(s.rows[0][0].get<sparqlxx::Iri>() == sparqlxx::Iri{"/Europe"});
+	assert(s.rows[0][0].get<sparqlxx::Iri>() == sparqlxx::Iri{"tag:xtreeme.org,2020:tests#Europe"});
 }
 
 int main()

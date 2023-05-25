@@ -60,18 +60,19 @@ void test_ask(char* dsn)
 	auto db = Database{dsn};
 
 	db.query(R"(
+		BASE <tag:xtreeme.org,2020:tests>
 		PREFIX owl: <http://www.w3.org/2002/07/owl#>
 		INSERT DATA {
-			<isIn> a owl:TransitiveProperty.
-			<Warsaw> <isIn> <Poland>.
-			<Poland> <isIn> <Europe>.
+			<#isIn> a owl:TransitiveProperty.
+			<#Warsaw> <#isIn> <#Poland>.
+			<#Poland> <#isIn> <#Europe>.
 		})");
 
-	auto res = db.query("ASK { <Warsaw> <isIn> <Poland>. }");
+	auto res = db.query("BASE <tag:xtreeme.org,2020:tests> ASK { <#Warsaw> <#isIn> <#Poland>. }");
 	assert(res.is<bool>());
 	assert(res.get<bool>() == true);
 
-	res = db.query("ASK { <Warsaw> <isIn> <Asia>. }");
+	res = db.query("BASE <tag:xtreeme.org,2020:tests> ASK { <#Warsaw> <#isIn> <#Asia>. }");
 	assert(res.is<bool>());
 	assert(res.get<bool>() == false);
 }
@@ -81,14 +82,15 @@ void test_ask_reasoner(char* dsn)
 	auto db = Database{dsn};
 
 	db.query(R"(
+		BASE <tag:xtreeme.org,2020:tests>
 		PREFIX owl: <http://www.w3.org/2002/07/owl#>
 		INSERT DATA {
-			<isIn> a owl:TransitiveProperty.
-			<Warsaw> <isIn> <Poland>.
-			<Poland> <isIn> <Europe>.
+			<#isIn> a owl:TransitiveProperty.
+			<#Warsaw> <#isIn> <#Poland>.
+			<#Poland> <#isIn> <#Europe>.
 		})");
 
-	auto res = db.query("ASK { <Warsaw> <isIn> <Europe>. }");
+	auto res = db.query("BASE <tag:xtreeme.org,2020:tests> ASK { <#Warsaw> <#isIn> <#Europe>. }");
 	assert(res.is<bool>());
 	assert(res.get<bool>() == true);
 }
@@ -97,23 +99,25 @@ void test_insert_delete(char* dsn)
 {
 	auto db = Database{dsn};
 
-	auto res = db.query("ASK { <Warsaw> <isIn> <Poland>. }");
+	auto res = db.query("BASE <tag:xtreeme.org,2020:tests> ASK { <#Warsaw> <#isIn> <#Poland>. }");
 	assert(res.is<bool>() && res.get<bool>() == false);
 
 	db.query(R"(
+		BASE <tag:xtreeme.org,2020:tests>
 		INSERT DATA {
-			<Warsaw> <isIn> <Poland>.
+			<#Warsaw> <#isIn> <#Poland>.
 		})");
 
-	res = db.query("ASK { <Warsaw> <isIn> <Poland>. }");
+	res = db.query("BASE <tag:xtreeme.org,2020:tests> ASK { <#Warsaw> <#isIn> <#Poland>. }");
 	assert(res.is<bool>() && res.get<bool>() == true);
 
 	db.query(R"(
+		BASE <tag:xtreeme.org,2020:tests>
 		DELETE DATA {
-			<Warsaw> <isIn> <Poland>.
+			<#Warsaw> <#isIn> <#Poland>.
 		})");
 
-	res = db.query("ASK { <Warsaw> <isIn> <Poland>. }");
+	res = db.query("BASE <tag:xtreeme.org,2020:tests> ASK { <#Warsaw> <#isIn> <#Poland>. }");
 	assert(res.is<bool>() && res.get<bool>() == false);
 }
 
