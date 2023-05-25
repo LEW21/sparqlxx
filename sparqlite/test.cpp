@@ -7,6 +7,7 @@
 #include <boost/archive/binary_oarchive.hpp>
 
 #include <fstream>
+#include <sstream>
 
 using namespace sparqlite;
 

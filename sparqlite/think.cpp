@@ -112,7 +112,7 @@ namespace sparqlite
 		// TODO equivalentClass, subClassOf
 
 		// Remove useless ideas, like A => A.
-		auto Rbak = move(R);
+		auto Rbak = std::move(R);
 		R = {};
 		for (auto r : Rbak)
 		{

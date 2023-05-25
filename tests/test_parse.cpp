@@ -27,7 +27,7 @@ WHERE {
 	assert(s.is<sparqlxx::Select>());
 	auto sse = sparqlxx::Algebra::to_sse(s.get<sparqlxx::Select>().op);
 
-	auto correct_sse = R"(
+	auto correct_sse = &R"(
 (project (?name ?mbox ?book)
 	(join
 		(leftjoin
@@ -43,7 +43,7 @@ WHERE {
 		)
 	)
 )
-)" + 1;  // +1 - skip first /n
+)"[1];
 
 	assert(sse == correct_sse);
 }

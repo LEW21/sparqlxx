@@ -19,7 +19,7 @@ namespace sparqlxx
 		for (size_t i = 0; i < a.size(); ++i)
 			if (tolower(a[i]) != tolower(b[i]))
 				return false;
-			return true;
+		return true;
 	}
 
 	template <typename T>

@@ -12,7 +12,7 @@ namespace sparqlxx
 		for (size_t i = 0; i < count; ++i)
 			if (tolower(a[i]) != tolower(b[i]))
 				return false;
-			return true;
+		return true;
 	}
 	#endif
 

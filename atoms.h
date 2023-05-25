@@ -201,8 +201,8 @@ namespace sparqlxx
 					break;
 			}
 
-			turtle += '"';
-			return turtle;
+		turtle += '"';
+		return turtle;
 	}
 	#endif
 
