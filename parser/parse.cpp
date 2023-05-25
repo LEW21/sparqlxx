@@ -16,12 +16,12 @@ namespace sparqlxx
 		{
 			auto q = t.read<Query>();
 			t.match_end();
-			return std::move(q);
+			return q;
 		}
 
 		auto u = t.read<Update>();
 		t.match_end();
-		return std::move(u);
+		return u;
 	}
 
 	auto parse(const string& sparql) -> SPARQL
